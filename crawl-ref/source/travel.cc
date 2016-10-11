@@ -2850,9 +2850,6 @@ void start_explore(bool grab_items)
                 }
             }
         }
-
-        if (corpse_on_pos && Options.auto_sacrifice)
-            pray(false);
     }
 
     you.running = (grab_items ? RMODE_EXPLORE_GREEDY : RMODE_EXPLORE);
