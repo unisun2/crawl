@@ -509,7 +509,8 @@ swirling vortex of air.
 %%%%
 alligator
 
-An aggressive crocodilian with great crunching jaws full of sharp teeth.
+An aggressive crocodilian with great crunching jaws full of sharp teeth. It
+thrashes around victims that it bites.
 %%%%
 alligator snapping turtle
 
