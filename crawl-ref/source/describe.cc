@@ -2992,6 +2992,7 @@ static string _flavour_base_desc(attack_flavour flavour)
         { AF_POISON,            "cause poisoning" },
         { AF_POISON_STRONG,     "cause strong poisoning" },
         { AF_ROT,               "cause rotting" },
+        { AF_THRASH,            "thrash around" },
         { AF_VAMPIRIC,          "drain health from the living" },
         { AF_KLOWN,             "cause random powerful effects" },
         { AF_DISTORT,           "cause wild translocation effects" },

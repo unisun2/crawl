@@ -2991,6 +2991,65 @@ void melee_attack::mons_apply_attack_flavour()
         if (coinflip())
             defender->weaken(attacker, 12);
         break;
+
+    // On successful attack, move the defender to a
+    // random valid tile adjacent to the attacker.
+    // Water tiles are prioritized!
+    case AF_THRASH:
+        bool water_adjacent = false;
+        vector<coord_def> viable_tile;
+
+        // Check adjacent tiles for habitable water tiles. Prioritize if found.
+        for (adjacent_iterator ri(attacker->pos()); ri; ++ri)
+        {
+            if (feat_is_water(grd(*ri))
+                && defender->is_habitable_feat(grd(*ri))
+                && !actor_at(*ri))
+            {
+                water_adjacent = true;
+            }
+        }
+
+        // Select water xor floor tiles to pull the defender into.
+        for (adjacent_iterator ri(attacker->pos()); ri; ++ri)
+        {
+            // Sanity checks: can they inhabit it? Is another actor there?
+            if (!defender->is_habitable_feat(grd(*ri))
+                || actor_at(*ri))
+            {
+                continue;
+            }
+
+            if (water_adjacent && feat_is_water(grd(*ri)))
+                viable_tile.push_back(*ri);
+            else if (!water_adjacent && !feat_is_water(grd(*ri)))
+                viable_tile.push_back(*ri);
+        }
+
+        // Nowhere to thrash to!!
+        if (viable_tile.size() == 0)
+            break;
+
+        if (needs_message)
+        {
+            mprf("%s thrashes %s around!",
+                 atk_name(DESC_THE).c_str(),
+                 defender_name(false).c_str());
+        }
+
+        // Select random validated tile then move the defender.
+        const coord_def new_pos = *random_iterator(viable_tile);
+
+        if (defender->is_player())
+        {
+            move_player_to_grid(new_pos, false);
+            // Interrupt stair travel and passwall.
+            stop_delay(true);
+        }
+        else
+            defender->move_to_pos(new_pos);
+
+        break;
     }
 }
 
